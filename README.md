@@ -28,5 +28,7 @@ A wallet web application designed to help users track income, expenses, and budg
    ```bash
    git clone https://github.com/muodilo/wallet-web-app.git
 
-## Live Demo
-[View the live site here!](https://wallet-web-app-weld.vercel.app/)
+
+## Deployed Link
+- **Frontend**: [View the live site here!](https://wallet-web-app-weld.vercel.app/)
+- **Backend**: [backend](https://wallet-web-app.onrender.com/)
