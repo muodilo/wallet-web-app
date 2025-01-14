@@ -1,18 +1,21 @@
 const express = require("express");
-const dotenv = require("dotenv");
+require("dotenv").config();
+const colors = require("colors");
 const connectDB = require("./config/db.js");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 
 
-// Load environment variables
-dotenv.config();
+connectDB();
 
 
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+
 
 // Routes
 app.get("/", (req, res) => {
