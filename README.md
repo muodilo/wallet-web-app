@@ -31,4 +31,5 @@ A wallet web application designed to help users track income, expenses, and budg
 
 ## Deployed Link
 - **Frontend**: [View the live site here!](https://wallet-web-app-weld.vercel.app/)
+- **API**: [Swagger API Documentation](https://wallet-web-app.onrender.com/api-docs/#)
 - **Backend**: [backend](https://wallet-web-app.onrender.com/)

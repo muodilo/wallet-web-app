@@ -21,7 +21,6 @@ const { createUser } = require("../controllers/userController.js");
  *               - firstname
  *               - lastname
  *               - email
- *               - phone
  *               - password
  *             properties:
  *               firstname:
@@ -33,16 +32,13 @@ const { createUser } = require("../controllers/userController.js");
  *               email:
  *                 type: string
  *                 description: Email address of the user, must be unique
- *               phone:
- *                 type: string
- *                 description: Phone number of the user, must be unique
  *               password:
  *                 type: string
  *                 description: User's password (will be hashed before storing)
  *               role:
  *                 type: string
- *                 enum: [employee, admin]
- *                 description: Role of the user (admin can assign either role; defaults to employee)
+ *                 enum: [user, admin]
+ *                 description: Role of the user (admin can assign either role; defaults to user)
  *               imageUrl:
  *                 type: string
  *                 nullable: true
@@ -64,8 +60,6 @@ const { createUser } = require("../controllers/userController.js");
  *                   type: string
  *                 email:
  *                   type: string
- *                 phone:
- *                   type: string
  *                 role:
  *                   type: string
  *                 imageUrl:
@@ -77,8 +71,7 @@ const { createUser } = require("../controllers/userController.js");
  *                   description: Authentication token for the created user
  *       400:
  *         description: Bad request (e.g., missing required fields or user already exists)
- *       403:
- *         description: Forbidden (admin access only or user already exists)
+
  */
 router.post("/register", createUser);
 
