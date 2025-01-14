@@ -17,7 +17,7 @@ const createUser = asyncHandler(async (req, res) => {
 
 	try {
 		// Check if the user already exists by email or phone
-		const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+		const existingUser = await User.findOne({ $or: [{ email }] });
 		if (existingUser) {
 			res.status(403);
 			throw new Error("User with this email or phone number already exists");
