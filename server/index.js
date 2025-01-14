@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
+const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
 
 
 // Load environment variables
