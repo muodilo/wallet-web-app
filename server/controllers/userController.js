@@ -52,6 +52,52 @@ const createUser = asyncHandler(async (req, res) => {
 	}
 });
 
+
+
+// Login user
+const loginUser = asyncHandler(async (req, res) => {
+	const { email, password } = req.body;
+
+	// Ensure phone and password are provided
+	if (!email || !password) {
+		res.status(401);
+		throw new Error("Please provide both phone and password");
+	}
+
+	try {
+		// Check if user with provided email exists
+		const user = await User.findOne({ email });
+		if (!user) {
+			res.status(401);
+			throw new Error("Invalid email or password");
+		}
+
+		// Verify if the provided password matches the stored hashed password
+		const isPasswordMatch = await bcrypt.compare(password, user.password);
+		if (!isPasswordMatch) {
+			res.status(401);
+			throw new Error("Invalid email or password");
+		}
+
+		// If all checks pass, generate and return the token
+		res.status(200).json({
+			id: user._id,
+			firstname: user.firstname,
+			lastname: user.lastname,
+      email: user.email,
+			role: user.role,
+			imageUrl: user.imageUrl,
+			token: generateToken(user._id),
+		});
+	} catch (error) {
+		res.status(500);
+		throw new Error(error.message);
+	}
+});
+
+
+
+
 // Token generation function
 const generateToken = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -59,4 +105,4 @@ const generateToken = (id) => {
 	});
 };
 
-module.exports = { createUser };
+module.exports = { createUser, loginUser };
