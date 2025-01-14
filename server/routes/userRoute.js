@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createUser } = require("../controllers/userController.js");
+const { createUser, loginUser } = require("../controllers/userController.js");
 
 /**
  * @swagger
@@ -74,5 +74,72 @@ const { createUser } = require("../controllers/userController.js");
 
  */
 router.post("/register", createUser);
+
+
+/**
+ * @swagger
+ * /api/v1/users/login:
+ *   post:
+ *     summary: Log in a user
+ *     description: Authenticate a user using their email and password, returning a JSON Web Token (JWT) if successful.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: User's email
+ *                 example: "example@gmail.com"
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 example: "yourpassword"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   description: Unique identifier for the user
+ *                 firstname:
+ *                   type: string
+ *                   description: User's first name
+ *                 lastname:
+ *                   type: string
+ *                   description: User's last name
+ *                 email:
+ *                   type: string
+ *                   description: User's email number
+ *                 role:
+ *                   type: string
+ *                   description: User's role (e.g., employee or admin)
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for authenticated requests
+ *       401:
+ *         description: Unauthorized - Invalid email or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid email or password"
+ *       500:
+ *         description: Server error
+ */
+router.post("/login", loginUser);
+
+
 
 module.exports = router;
