@@ -20,7 +20,7 @@ const createUser = asyncHandler(async (req, res) => {
 		const existingUser = await User.findOne({ $or: [{ email }] });
 		if (existingUser) {
 			res.status(403);
-			throw new Error("User with this email or phone number already exists");
+			throw new Error("User with this email already exists");
 		}
 
 		// Hash the password before saving
