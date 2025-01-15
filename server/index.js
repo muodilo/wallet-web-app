@@ -22,6 +22,9 @@ app.use(cors());
 
 // Routes
 app.use("/api/v1/users", require("./routes/userRoute.js"));
+app.use("/api/v1/accounts", require("./routes/accountRoute.js"));
+app.use("/api/v1/categories", require("./routes/categoryRoute.js"));
+app.use("/api/v1/transactions", require("./routes/transactionRoute.js"));
 
 
 app.use(errorHandler);
