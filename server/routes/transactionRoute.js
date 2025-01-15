@@ -373,7 +373,7 @@ router.get("/summary", protect, getTransactionSummary);
 
 /**
  * @swagger
- * /transactions/bar-chart:
+ * api/v1/transactions/bar-chart:
  *   get:
  *     summary: Get bar chart data for income and expense over a specified period (week, month, or year)
  *     description: This endpoint returns bar chart data grouped by income and expense for a given period. The period can be specified as 'week', 'month', or 'year'.
