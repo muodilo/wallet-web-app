@@ -1,11 +1,35 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState,useEffect } from "react";
+import { Link,useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { login, resetUser } from '../features/auth/authSlice'
+
 const SignIn = () => {
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	});
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+		(state) => state.reducer.auth
+	);
+
+    useEffect(() => {
+			if (isError) {
+				toast.error(message);
+			}
+
+			//redirect when logged in
+			if (isSuccess && user) {
+				navigate(`/dashboard`);
+			}
+
+			dispatch(resetUser());
+    }, [isError, isSuccess, user, message]);
+  
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [errors, setErrors] = useState({});
@@ -29,15 +53,21 @@ const SignIn = () => {
 	};
 
 	// Form submission
-	const handleSubmit = (e) => {
+	const handleSubmit = async(e) => {
 		e.preventDefault();
-		if (validateForm()) {
-			console.log("Sign In Successful:", formData);
-			toast.success("Logged in successfully");
-			setFormData({
-				email: "",
-				password: "",
-			});
+    if (validateForm()) {
+      try {
+        
+        await dispatch(login(formData));
+        
+        setFormData({
+          email: "",
+          password: "",
+        });
+      } catch (error) {
+        toast.error(error);
+      } 
+
 		}
 	};
 
@@ -96,9 +126,14 @@ const SignIn = () => {
 					<button
 						type='submit'
 						className='w-full mb-2 bg-primaryColor text-white py-2 rounded-lg hover:bg-primaryColor/90 transition'>
-						Sign In
-          </button>
-          <p className="text-center">Do not have an account? <Link className="text-primaryColor underline" to='/sign-up'>SignUp</Link> </p>
+						{isLoading ? "Singing In..." : "Sign In"}
+					</button>
+					<p className='text-center'>
+						Do not have an account?{" "}
+						<Link className='text-primaryColor underline' to='/sign-up'>
+							SignUp
+						</Link>{" "}
+					</p>
 				</form>
 			</div>
 		</div>
