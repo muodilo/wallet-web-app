@@ -25,11 +25,11 @@ const Navbar = () => {
 				{/* For large screen */}
 				<div className='lg:flex hidden items-center justify-between py-5 '>
 					<div>
-						<h2 className='text-xl font-bold'>
+						<Link to='/' className='text-xl font-bold'>
 							WALLET<span className='text-primaryColor'>APP</span>{" "}
-						</h2>
+						</Link>
 					</div>
-					<div className='hidden'>
+					<div className=''>
 						<ul className='flex items-center gap-5'>
 							<li>
 								<Link
@@ -78,11 +78,11 @@ const Navbar = () => {
 						</ul>
 					</div>
 					<div className='flex items-center gap-3'>
-						<button className='border px-2 py-1 rounded'>Sign Up</button>
+						<Link to='/sign-up' className='border px-2 py-1 rounded'>Sign Up</Link>
 						Or
-						<button className='border px-2 py-1 rounded bg-primaryColor text-white'>
+						<Link to='/sign-in' className='border px-2 py-1 rounded bg-primaryColor text-white'>
 							Log In
-						</button>
+						</Link>
 					</div>
 				</div>
 
