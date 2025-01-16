@@ -1,15 +1,36 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import {toast} from 'react-toastify'
+import { useState,useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from 'react-toastify'
+import {register,resetUser} from '../features/auth/authSlice'
 
 const Signup = () => {
 	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
+		firstname: "",
+		lastname: "",
 		email: "",
 		password: "",
 		confirmPassword: "",
-	});
+  });
+  
+    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
+		(state) => state.reducer.auth
+  );
+  
+  useEffect(() => {
+		if (isError) {
+			toast.error(message);
+		}
+
+		//redirect when logged in
+		if (isSuccess && user) {
+			navigate("/dashboard");
+		}
+
+		dispatch(resetUser());
+	}, [isError, isSuccess, user, message, dispatch]);
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [errors, setErrors] = useState({});
@@ -23,10 +44,10 @@ const Signup = () => {
 	const validateForm = () => {
 		const newErrors = {};
 
-		if (!formData.firstName.trim())
-			newErrors.firstName = "First name is required.";
-		if (!formData.lastName.trim())
-			newErrors.lastName = "Last name is required.";
+		if (!formData.firstname.trim())
+			newErrors.firstname = "First name is required.";
+		if (!formData.lastname.trim())
+			newErrors.lastname = "Last name is required.";
 		if (!formData.email.trim()) newErrors.email = "Email is required.";
 		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
 			newErrors.email = "Invalid email format.";
@@ -41,18 +62,23 @@ const Signup = () => {
 	};
 
 	// Form submission
-	const handleSubmit = (e) => {
+	const handleSubmit = async(e) => {
 		e.preventDefault();
-		if (validateForm()) {
-			console.log("Form Submitted:", formData);
-      toast.success("Signup successful!");
-			setFormData({
-				firstName: "",
-				lastName: "",
-				email: "",
-				password: "",
-				confirmPassword: "",
-			});
+    if (validateForm()) {
+      
+      try {
+         await dispatch(register(formData));
+        console.log("Form Submitted:", formData);
+        setFormData({
+          firstname: "",
+          lastname: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } catch (error) {
+        toast.error(error);
+      }
 		}
 	};
 
@@ -70,15 +96,15 @@ const Signup = () => {
 						</label>
 						<input
 							type='text'
-							name='firstName'
-							value={formData.firstName}
+							name='firstname'
+							value={formData.firstname}
 							onChange={handleChange}
 							className={`w-full px-4 py-2 border rounded-lg ${
-								errors.firstName ? "border-red-500" : "border-gray-300"
+								errors.firstname ? "border-red-500" : "border-gray-300"
 							}`}
 						/>
 						{errors.firstName && (
-							<p className='text-red-500 text-sm mt-1'>{errors.firstName}</p>
+							<p className='text-red-500 text-sm mt-1'>{errors.firstname}</p>
 						)}
 					</div>
 
@@ -89,15 +115,15 @@ const Signup = () => {
 						</label>
 						<input
 							type='text'
-							name='lastName'
-							value={formData.lastName}
+							name='lastname'
+							value={formData.lastname}
 							onChange={handleChange}
 							className={`w-full px-4 py-2 border rounded-lg ${
 								errors.lastName ? "border-red-500" : "border-gray-300"
 							}`}
 						/>
 						{errors.lastName && (
-							<p className='text-red-500 text-sm mt-1'>{errors.lastName}</p>
+							<p className='text-red-500 text-sm mt-1'>{errors.lastname}</p>
 						)}
 					</div>
 
@@ -172,9 +198,14 @@ const Signup = () => {
 					<button
 						type='submit'
 						className='w-full mb-2 bg-primaryColor text-white py-2 rounded-lg hover:bg-primaryColor/90 transition'>
-						Sign Up
-          </button>
-          <p className="text-center">Already have an account <Link className="text-primaryColor underline " to='/sign-in'>Log In</Link></p>
+						{isLoading ? "Singing Up..." : "Sign Up"}
+					</button>
+					<p className='text-center'>
+						Already have an account{" "}
+						<Link className='text-primaryColor underline ' to='/sign-in'>
+							Log In
+						</Link>
+					</p>
 				</form>
 			</div>
 		</div>

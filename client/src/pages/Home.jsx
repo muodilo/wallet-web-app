@@ -1,10 +1,31 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { TfiWallet } from "react-icons/tfi";
 import { FiBarChart2 } from "react-icons/fi";
 import { FiPieChart } from "react-icons/fi";
 import { MdOutlineInsights } from "react-icons/md";
 import { Link } from "react-router-dom";
 
+
 const Home = () => {
+
+  const navigate = useNavigate();
+
+    const { user, isSuccess} = useSelector(
+			(state) => state.reducer.auth
+  );
+  
+      useEffect(() => {
+
+
+				//redirect when logged in
+				if (isSuccess && user) {
+					navigate(`/dashboard`);
+				}
+
+			}, [isSuccess, user]);
+
 	return (
 		<div className='relative lg:px-[7rem] md:px-[5rem] px-5 bg-gradient-to-br from-white via-gray-50 to-gray-100 overflow-hidden'>
 			{/* Artistic Background Shapes */}
@@ -26,26 +47,28 @@ const Home = () => {
 						{/* Features */}
 						<div className='grid grid-cols-2 gap-4 text-xl mb-7'>
 							<div className='flex items-center gap-2'>
-								<TfiWallet className="text-violet-500"/>
+								<TfiWallet className='text-violet-500' />
 								<p className='text-neutral-500'>Manage Budgets</p>
 							</div>
 							<div className='flex items-center gap-2'>
-								<FiBarChart2 className="text-green-500"/>
+								<FiBarChart2 className='text-green-500' />
 								<p className='text-neutral-500'>Track Expenses</p>
 							</div>
 							<div className='flex items-center gap-2'>
-								<FiPieChart className="text-primaryColor"/>
+								<FiPieChart className='text-primaryColor' />
 								<p className='text-neutral-500'>Budget Planning</p>
 							</div>
 							<div className='flex items-center gap-2'>
-								<MdOutlineInsights className="text-yellow-500"/>
+								<MdOutlineInsights className='text-yellow-500' />
 								<p className='text-neutral-500'>Financial Insights</p>
 							</div>
 						</div>
 
 						{/* CTA Button */}
 						<div className='flex md:justify-start justify-center'>
-							<Link to='/sign-in' className='w-full md:w-auto px-5 py-2 rounded-lg bg-primaryColor text-white text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
+							<Link
+								to='/sign-in'
+								className='w-full md:w-auto px-5 py-2 rounded-lg bg-primaryColor text-white text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
 								Get started
 							</Link>
 						</div>
