@@ -45,7 +45,7 @@ const Home = () => {
 
 						{/* CTA Button */}
 						<div className='flex md:justify-start justify-center'>
-							<Link className='w-full md:w-auto px-5 py-2 rounded-lg bg-primaryColor text-white text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
+							<Link to='/sign-in' className='w-full md:w-auto px-5 py-2 rounded-lg bg-primaryColor text-white text-center shadow-lg hover:shadow-xl transition-shadow duration-300'>
 								Get started
 							</Link>
 						</div>

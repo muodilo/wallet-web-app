@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {toast} from 'react-toastify'
-
-const Signup = () => {
+import { toast } from "react-toastify";
+const SignIn = () => {
 	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
 		email: "",
 		password: "",
-		confirmPassword: "",
 	});
 
 	const [showPassword, setShowPassword] = useState(false);
@@ -23,18 +19,10 @@ const Signup = () => {
 	const validateForm = () => {
 		const newErrors = {};
 
-		if (!formData.firstName.trim())
-			newErrors.firstName = "First name is required.";
-		if (!formData.lastName.trim())
-			newErrors.lastName = "Last name is required.";
 		if (!formData.email.trim()) newErrors.email = "Email is required.";
 		else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
 			newErrors.email = "Invalid email format.";
 		if (!formData.password.trim()) newErrors.password = "Password is required.";
-		else if (formData.password.length < 6)
-			newErrors.password = "Password must be at least 6 characters.";
-		if (formData.confirmPassword !== formData.password)
-			newErrors.confirmPassword = "Passwords do not match.";
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0; // Return true if no errors
@@ -44,14 +32,11 @@ const Signup = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (validateForm()) {
-			console.log("Form Submitted:", formData);
-      toast.success("Signup successful!");
+			console.log("Sign In Successful:", formData);
+			toast.success("Logged in successfully");
 			setFormData({
-				firstName: "",
-				lastName: "",
 				email: "",
 				password: "",
-				confirmPassword: "",
 			});
 		}
 	};
@@ -59,48 +44,8 @@ const Signup = () => {
 	return (
 		<div className='min-h-screen flex items-center justify-center bg-gray-100'>
 			<div className='w-full max-w-md  p-8 rounded-lg '>
-				<h2 className='text-2xl font-bold text-center mb-6'>
-					Create an Account
-				</h2>
+				<h2 className='text-2xl font-bold text-center mb-6'>Sign In</h2>
 				<form onSubmit={handleSubmit}>
-					{/* First Name */}
-					<div className='mb-4'>
-						<label className='block text-gray-700 font-semibold mb-1'>
-							First Name
-						</label>
-						<input
-							type='text'
-							name='firstName'
-							value={formData.firstName}
-							onChange={handleChange}
-							className={`w-full px-4 py-2 border rounded-lg ${
-								errors.firstName ? "border-red-500" : "border-gray-300"
-							}`}
-						/>
-						{errors.firstName && (
-							<p className='text-red-500 text-sm mt-1'>{errors.firstName}</p>
-						)}
-					</div>
-
-					{/* Last Name */}
-					<div className='mb-4'>
-						<label className='block text-gray-700 font-semibold mb-1'>
-							Last Name
-						</label>
-						<input
-							type='text'
-							name='lastName'
-							value={formData.lastName}
-							onChange={handleChange}
-							className={`w-full px-4 py-2 border rounded-lg ${
-								errors.lastName ? "border-red-500" : "border-gray-300"
-							}`}
-						/>
-						{errors.lastName && (
-							<p className='text-red-500 text-sm mt-1'>{errors.lastName}</p>
-						)}
-					</div>
-
 					{/* Email */}
 					<div className='mb-4'>
 						<label className='block text-gray-700 font-semibold mb-1'>
@@ -147,38 +92,17 @@ const Signup = () => {
 						)}
 					</div>
 
-					{/* Confirm Password */}
-					<div className='mb-4'>
-						<label className='block text-gray-700 font-semibold mb-1'>
-							Confirm Password
-						</label>
-						<input
-							type={showPassword ? "text" : "password"}
-							name='confirmPassword'
-							value={formData.confirmPassword}
-							onChange={handleChange}
-							className={`w-full px-4 py-2 border rounded-lg ${
-								errors.confirmPassword ? "border-red-500" : "border-gray-300"
-							}`}
-						/>
-						{errors.confirmPassword && (
-							<p className='text-red-500 text-sm mt-1'>
-								{errors.confirmPassword}
-							</p>
-						)}
-					</div>
-
 					{/* Submit Button */}
 					<button
 						type='submit'
 						className='w-full mb-2 bg-primaryColor text-white py-2 rounded-lg hover:bg-primaryColor/90 transition'>
-						Sign Up
+						Sign In
           </button>
-          <p className="text-center">Already have an account <Link className="text-primaryColor underline " to='/sign-in'>Log In</Link></p>
+          <p className="text-center">Do not have an account? <Link className="text-primaryColor underline" to='/sign-up'>SignUp</Link> </p>
 				</form>
 			</div>
 		</div>
 	);
 };
 
-export default Signup;
+export default SignIn;

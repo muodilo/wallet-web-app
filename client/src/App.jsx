@@ -4,6 +4,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Signup from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 
 function App() {
 	return (
@@ -11,6 +13,8 @@ function App() {
 			<Navbar />
 			<Routes>
 				<Route path='/' element={<Home />} />
+				<Route path='/sign-up' element={<Signup />} />
+				<Route path='/sign-in' element={<SignIn />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />
