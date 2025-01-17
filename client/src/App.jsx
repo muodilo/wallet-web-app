@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
 	return (
@@ -15,10 +16,10 @@ function App() {
 				<Route path='/' element={<Home />} />
 				<Route path='/sign-up' element={<Signup />} />
 				<Route path='/sign-in' element={<SignIn />} />
+				<Route path='/dashboard' element={<Dashboard />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />
-			
 		</Router>
 	);
 }

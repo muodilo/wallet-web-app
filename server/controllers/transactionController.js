@@ -83,24 +83,26 @@ const createTransaction = asyncHandler(async (req, res) => {
 });
 
 
-// Get all transactions
 const getAllTransactions = asyncHandler(async (req, res) => {
-  try {
-    // Fetch all transactions
-    const transactions = await Transaction.find().populate('account category');
+	try {
+		// Fetch transactions for the authenticated user
+		const transactions = await Transaction.find({
+			user: req.user._id,
+		}).populate("account category"); // Assuming `account` and `category` are references
 
-    // Check if transactions exist
-    if (!transactions || transactions.length === 0) {
-      res.status(404);
-      throw new Error("No transactions found");
-    }
+		// Check if transactions exist
+		if (!transactions || transactions.length === 0) {
+			res.status(404);
+			throw new Error("No transactions found for the authenticated user");
+		}
 
-    res.status(200).json(transactions);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
-  }
+		res.status(200).json(transactions);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: error.message });
+	}
 });
+
 
 
 
