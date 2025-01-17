@@ -7,6 +7,7 @@ import PieChartView from "../components/PieChartView";
 import { useEffect } from "react";
 import { useGet } from "../hooks/useGet";
 import  CurrentTransaction  from "../components/CurrentTransaction";
+import BudgetList from "../components/BudgetList";
 
 const capitalizeFirstLetter = (string) => {
 	if (!string) return "";
@@ -55,7 +56,7 @@ const Dashboard = () => {
 				{/* Overview */}
 				<div className="mb-5">
 					<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 px-2'>
-						<div className='rounded-lg bg-white'>
+						<div className='rounded-lg bg-white shadow'>
 							<BarChartView />
 						</div>
 						<div className='flex flex-col gap-2'>
@@ -106,19 +107,22 @@ const Dashboard = () => {
 								</div>
 							</div>
 						</div>
-						<div className='rounded-lg bg-white flex items-center '>
+						<div className='rounded-lg bg-white flex items-center shadow'>
 							<PieChartView />
 						</div>
 					</div>
         </div>
         {/* current transactions */}
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
-          <div className="lg:col-span-2 px-2 md:grid-cols-1">
-          <CurrentTransaction/>
+          <div className="lg:col-span-2 px-2 md:grid-cols-1  rounded">
+            <div className="bg-white shadow rounded px-1">
+              <CurrentTransaction/>
+
+            </div>
 
           </div>
-          <div className="col-span-1">
-
+          <div className="col-span-1 ">
+            <BudgetList/>
           </div>
 
         </div>

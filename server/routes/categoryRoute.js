@@ -352,7 +352,7 @@ router.delete("/:categoryId", protect, deleteCategory);
  *       500:
  *         description: Internal server error
  */
-router.get("/categories", protect, getAllCategories);
+router.get("/", protect, getAllCategories);
 
 
 module.exports = router;

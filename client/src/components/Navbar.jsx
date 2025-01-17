@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation} from "react-router-dom";
+import { Link, useLocation,useNavigate} from "react-router-dom";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { Avatar, Dropdown } from "flowbite-react";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+	const navigate = useNavigate();
   const { user } = useSelector((state) => state.reducer.auth);
 	// State to toggle the menu
 	const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,8 @@ const Navbar = () => {
   const handleLogout = async() => {
 		const shouldLogout = window.confirm("Are you sure you want to logout?");
 		if (shouldLogout) {
-      await dispatch(logout());
+			await dispatch(logout());
+			navigate("/");
       setIsOpen(false);
 		}
 	};

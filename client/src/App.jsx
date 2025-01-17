@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
+import Transactions from "./pages/Transactions";
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 				<Route path='/sign-up' element={<Signup />} />
 				<Route path='/sign-in' element={<SignIn />} />
 				<Route path='/dashboard' element={<Dashboard />} />
+				<Route path='/transactions' element={<Transactions />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />

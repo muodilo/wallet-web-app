@@ -10,7 +10,7 @@ export default function CurrentTransaction() {
 	const API_URL = import.meta.env.VITE_API_URL;
 
 	const {
-		data: transactions,
+		data: transactions=[],
 		error,
 		isLoading,
 	} = useGet(`${API_URL}/transactions`, token, 5000);
@@ -29,8 +29,10 @@ export default function CurrentTransaction() {
 
 	if (isLoading) {
 		return (
-			<div className='overflow-x-auto'>
-				<h2 className='text-xl font-semibold mb-4'>Recent Transactions</h2>
+			<div className='overflow-x-auto '>
+				<h2 className='text- font-semibold mb-4 '>
+					Recent Transactions
+				</h2>
 				<Table hoverable>
 					<Table.Head>
 						<Table.HeadCell>Date</Table.HeadCell>
@@ -100,7 +102,7 @@ export default function CurrentTransaction() {
 										? "text-green-500 font-semibold"
 										: "text-red-500 font-semibold"
 								}>
-								{transaction.type === "Income" ? "+" : "-"}${transaction.amount}
+								{transaction.type === "Income" ? "+" : "-"}Rwf{transaction.amount}
 							</Table.Cell>
 							<Table.Cell className='flex gap-2'>
 								<button
