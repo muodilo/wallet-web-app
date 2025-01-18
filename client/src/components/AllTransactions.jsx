@@ -18,7 +18,7 @@ const AllTransactions = () => {
 		data: transactions,
 		error,
 		isLoading,
-	} = useGet(`${API_URL}/transactions`, token, 5000);
+	} = useGet(`${API_URL}/transactions`, token, 2000);
 
 	// Fetch accounts and categories
 	const { data: accounts } = useGet(`${API_URL}/accounts`, token, 5000);
@@ -154,6 +154,14 @@ const AllTransactions = () => {
 	// Handle delete transaction
 	const handleDelete = async (transactionId) => {
 		setDeletingTransactionId(transactionId); // Set specific transaction to delete
+		// Show confirmation dialog before proceeding with deletion
+		const isConfirmed = window.confirm(
+			"Are you sure you want to delete this transaction?"
+		);
+
+		if (!isConfirmed) {
+			return; // If the user cancels, stop the deletion
+		}
 
 		try {
 			const response = await fetch(`${API_URL}/transactions/${transactionId}`, {

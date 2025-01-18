@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { FcInfo } from "react-icons/fc";
 
 const CreateTransactionModal = ({ isOpen, onClose }) => {
 	const { user } = useSelector((state) => state.reducer.auth);
@@ -15,14 +16,14 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 	const [accounts, setAccounts] = useState([]); // Add state for accounts
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [childCategoryName, setChildCategoryName] = useState("");
-	const [childCategoryType, setChildCategoryType] = useState("Income");
+	const [childCategoryType, setChildCategoryType] = useState("");
 	const [isCategoriesEmpty, setIsCategoriesEmpty] = useState(false);
 
 	const [formData, setFormData] = useState({
 		account: "",
 		category: "",
 		amount: "",
-		type: "Income", // Default type
+		type: "", // Default type
 		description: "",
 	});
 
@@ -219,7 +220,7 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 				toast.success("Transaction created successfully!");
 				onClose(); // Close modal
 			} else {
-				toast.error(result.error || "Failed to create transaction.");
+				toast.error(result.message);
 			}
 		} catch (error) {
 			console.error(error);
@@ -241,26 +242,28 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 					<div className='mb-4'>
 						<label htmlFor='account' className='block text-sm font-medium mb-1'>
 							{accounts.length > 0 ? "Select Account" : ""}
-							{(accounts.length === 0) && (
+							{accounts.length === 0 && (
 								<Link className='text-primaryColor' to='/accounts'>
 									! You have no Account. click here and Add an Account
 								</Link>
 							)}
 						</label>
-						{(accounts.length > 0) && (<select
-							id='account'
-							name='account'
-							value={formData.account}
-							onChange={handleChange}
-							className='w-full p-2 border rounded'
-							required>
-							<option value=''>Select Account</option>
-							{accounts.map((account) => (
-								<option key={account._id} value={account._id}>
-									{account.name}
-								</option>
-							))}
-						</select>)}
+						{accounts.length > 0 && (
+							<select
+								id='account'
+								name='account'
+								value={formData.account}
+								onChange={handleChange}
+								className='w-full p-2 border rounded'
+								required>
+								<option value=''>Select Account</option>
+								{accounts.map((account) => (
+									<option key={account._id} value={account._id}>
+										{account.name}
+									</option>
+								))}
+							</select>
+						)}
 					</div>
 
 					{/* Category Selection */}
@@ -334,7 +337,11 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 
 					{/* New Subcategory */}
 					{selectedCategory && (
-						<div className='mb-4'>
+						<div className='mb-4 bg-primaryColor/10 p-4 rounded-lg shadow'>
+							<div className='flex items-center gap-2 mb-3'>
+								<FcInfo />
+								<p className='text-xs text-primaryColor'>only if needed</p>
+							</div>
 							<h3 className='font-medium mb-2'>
 								Create New Subcategory of {selectedCategory?.name}
 							</h3>
@@ -349,8 +356,10 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 								className='w-full p-2 border rounded mb-2'
 								value={childCategoryType}
 								onChange={(e) => setChildCategoryType(e.target.value)}>
-								<option value='Income'>Income</option>
-								<option value='Expense'>Expense</option>
+								<option value="">Select category</option>
+								<option value={selectedCategory?.type}>
+									{selectedCategory?.type}
+								</option>
 							</select>
 							<button
 								type='button'
@@ -362,21 +371,25 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 					)}
 
 					{/* Transaction Type */}
-					<div className='mb-4'>
-						<label htmlFor='type' className='block text-sm font-medium mb-1'>
-							Transaction Type
-						</label>
-						<select
-							id='type'
-							name='type'
-							value={formData.type}
-							onChange={handleChange}
-							className='w-full p-2 border rounded'
-							required>
-							<option value='Income'>Income</option>
-							<option value='Expense'>Expense</option>
-						</select>
-					</div>
+					{selectedCategory && (
+						<div className='mb-4'>
+							<label htmlFor='type' className='block text-sm font-medium mb-1'>
+								Transaction Type
+							</label>
+							<select
+								id='type'
+								name='type'
+								value={formData.type}
+								onChange={handleChange}
+								className='w-full p-2 border rounded'
+								required>
+								<option value="">Select type</option>
+								<option value={selectedCategory?.type}>
+									{selectedCategory?.type}
+								</option>
+							</select>
+						</div>
+					)}
 
 					{/* Amount */}
 					<div className='mb-4'>

@@ -65,6 +65,14 @@ const AccountsList = () => {
 
 	// Delete account handler
 	const handleDelete = async (accountId) => {
+		// Show confirmation dialog before proceeding with deletion
+		const isConfirmed = window.confirm(
+			"Are you sure you want to delete this account?"
+		);
+
+		if (!isConfirmed) {
+			return; // If the user cancels, stop the deletion
+		}
 		try {
 			const response = await fetch(`${API_URL}/accounts/${accountId}`, {
 				method: "DELETE",
@@ -85,7 +93,7 @@ const AccountsList = () => {
 	};
 
 	return (
-		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen'>
+		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
 			<div className='flex items-center justify-between mb-5'>
 				<h2 className='text-2xl font-bold mb-4'>Accounts</h2>
 				<button

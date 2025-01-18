@@ -182,20 +182,19 @@ const deleteTransaction = asyncHandler(async (req, res) => {
 		// Find the account associated with the transaction
 		const account = await Account.findById(transaction.account);
 		if (!account) {
-			res.status(404);
-			throw new Error("Account not found");
+
+			// If the transaction is an "Income", we subtract the amount from the account balance
+			if (transaction.type === "Income") {
+				account.balance -= transaction.amount;
+			} else if (transaction.type === "Expense") {
+				// If the transaction is an "Expense", we add the amount back to the account balance
+				account.balance += transaction.amount;
+			}
+	
+			// Save the updated account balance
+			await account.save();
 		}
 
-		// If the transaction is an "Income", we subtract the amount from the account balance
-		if (transaction.type === "Income") {
-			account.balance -= transaction.amount;
-		} else if (transaction.type === "Expense") {
-			// If the transaction is an "Expense", we add the amount back to the account balance
-			account.balance += transaction.amount;
-		}
-
-		// Save the updated account balance
-		await account.save();
 
 		// Delete the transaction
 		await transaction.deleteOne();
