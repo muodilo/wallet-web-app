@@ -41,8 +41,8 @@ export default function BudgetList() {
 					<div key={budget._id} className='mb-6'>
 						<div className='flex justify-between items-center mb-2'>
 							<span className='text-gray-900 dark:text-white'>
-								{budget.category.name.charAt(0).toUpperCase() +
-									budget.category.name.slice(1)}
+								{budget?.category?.name.charAt(0).toUpperCase() +
+									budget?.category?.name.slice(1)}
 							</span>
 							<span
 								className={`text-sm font-medium ${
