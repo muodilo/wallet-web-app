@@ -13,7 +13,7 @@ export default function PieChartView() {
 		data: accounts,
 		error,
 		isLoading,
-	} = useGet(`${API_URL}/accounts`, token);
+	} = useGet(`${API_URL}/accounts`, token,1000);
 
 	// Helper function to truncate text
 	const truncateText = (text, maxLength) => {
