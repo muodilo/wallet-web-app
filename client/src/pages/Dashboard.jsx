@@ -9,7 +9,7 @@ import { useGet } from "../hooks/useGet";
 import  CurrentTransaction  from "../components/CurrentTransaction";
 import BudgetList from "../components/BudgetList";
 import { useState } from "react";
-import CreateTransactionModal from "../components/CreateTransactionModal";
+import CreateAccountModal from "../components/CreateAccountModal";
 
 const capitalizeFirstLetter = (string) => {
 	if (!string) return "";
@@ -57,12 +57,12 @@ const Dashboard = () => {
 					</p>
 					<button
 						onClick={openModal}
-						className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-blue-600'>
-						Create transaction
+						className='bg-primaryColor text-white px-4 py-2 rounded'>
+						Create new account
 					</button>
 				</div>
 
-				<CreateTransactionModal isOpen={isModalOpen} onClose={closeModal} />
+				<CreateAccountModal isOpen={isModalOpen} closeModal={closeModal} />
 
 				{/* Overview */}
 				<div className='mb-5'>
