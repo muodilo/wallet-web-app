@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const CreateTransactionModal = ({ isOpen, onClose }) => {
 	const { user } = useSelector((state) => state.reducer.auth);
@@ -15,6 +16,7 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [childCategoryName, setChildCategoryName] = useState("");
 	const [childCategoryType, setChildCategoryType] = useState("Income");
+	const [isCategoriesEmpty, setIsCategoriesEmpty] = useState(false);
 
 	const [formData, setFormData] = useState({
 		account: "",
@@ -58,6 +60,9 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				const data = await response.json();
+				if(data.length === 0) {
+					setIsCategoriesEmpty(true);
+				}
 
 				if (response.ok) {
 					const topLevelCategories = data.filter((cat) => cat.parent === null);
@@ -235,9 +240,14 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 					{/* Account Selection */}
 					<div className='mb-4'>
 						<label htmlFor='account' className='block text-sm font-medium mb-1'>
-							Select Account
+							{accounts.length > 0 ? "Select Account" : ""}
+							{(accounts.length === 0) && (
+								<Link className='text-primaryColor' to='/accounts'>
+									! You have no Account. click here and Add an Account
+								</Link>
+							)}
 						</label>
-						<select
+						{(accounts.length > 0) && (<select
 							id='account'
 							name='account'
 							value={formData.account}
@@ -250,15 +260,18 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 									{account.name}
 								</option>
 							))}
-						</select>
+						</select>)}
 					</div>
 
 					{/* Category Selection */}
 					<div className='mb-4'>
 						<label className='block text-sm font-medium mb-1'>
-							{categories.length > 0
-								? "Select Category"
-								: "No Categories Available"}
+							{categories.length > 0 ? "Select Category" : ""}
+							{isCategoriesEmpty && (
+								<Link className='text-primaryColor' to='/categories'>
+									! You have no categories. click here and Add Category
+								</Link>
+							)}
 						</label>
 						<div>
 							{categories.map((category) => (
