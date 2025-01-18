@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import AccountsList from "./pages/AccountsList";
 import CategoriesPage from "./pages/CategoriesPage";
+import BudgetListPage from "./pages/BudgetListpage";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				<Route path='/transactions' element={<Transactions />} />
 				<Route path='/accounts' element={<AccountsList />} />
 				<Route path='/categories' element={<CategoriesPage />} />
+				<Route path='/budgets' element={<BudgetListPage />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />

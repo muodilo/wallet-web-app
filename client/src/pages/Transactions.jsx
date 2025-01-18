@@ -19,7 +19,7 @@ const Transactions = () => {
 		}, [user]);
 
 	return (
-		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen'>
+		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
 			<div className='mb-4 flex items-center justify-between'>
 				<h2 className='text-xl font-semibold'>All Transactions</h2>
 				<button
