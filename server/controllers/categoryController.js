@@ -120,23 +120,23 @@ const deleteCategory = asyncHandler(async (req, res) => {
     }
 });
 
-// Get all categories
 const getAllCategories = asyncHandler(async (req, res) => {
-    try {
-        // Fetch all categories belonging to the authenticated user
-        const categories = await Category.find({ user: req.user._id });
+	try {
+		// Fetch all categories belonging to the authenticated user
+		const categories = await Category.find({ user: req.user._id });
 
-        if (!categories.length) {
-            res.status(404);
-            throw new Error("No categories found");
-        }
+		// If no categories are found, return an empty array
+		if (!categories || categories.length === 0) {
+			return res.status(200).json([]); // Return an empty array with status 200
+		}
 
-        res.status(200).json(categories);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: error.message });
-    }
+		res.status(200).json(categories);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: error.message });
+	}
 });
+
 
 
 module.exports = {

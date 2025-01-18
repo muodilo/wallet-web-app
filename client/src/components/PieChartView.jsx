@@ -1,7 +1,7 @@
 import { PieChart } from "@mui/x-charts/PieChart";
 import { useGet } from "../hooks/useGet";
 import { useSelector } from "react-redux";
-
+import { Link } from "react-router-dom";
 
 export default function PieChartView() {
 	const { user } = useSelector((state) => state.reducer.auth);
@@ -13,15 +13,15 @@ export default function PieChartView() {
 		data: accounts,
 		error,
 		isLoading,
-	} = useGet(`${API_URL}/accounts`, token, 5000);
+	} = useGet(`${API_URL}/accounts`, token);
 
 	// Helper function to truncate text
 	const truncateText = (text, maxLength) => {
-		return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+		return text?.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 	};
 
 	// Prepare data for the pie chart with truncated labels
-	const pieData = accounts
+	const pieData = accounts?.length
 		? accounts.map((account, index) => ({
 				id: index,
 				value: account.balance,
@@ -29,15 +29,29 @@ export default function PieChartView() {
 		  }))
 		: [];
 
+	// Calculate total balance
+	const totalBalance = accounts?.length
+		? accounts.reduce((sum, account) => sum + account.balance, 0)
+		: 0;
+
 	return (
 		<div className='w-full flex flex-col items-center'>
-			<h2 className='text-lg font-semibold mb-4'>Accounts Balance</h2>
+			<h2 className='text-lg font-semibold'>Accounts Balance</h2>
+			{/* Display total balance */}
+			<p className='text-gray-600 mb-1'>
+				Total Balance: Rwf{totalBalance.toLocaleString()}
+			</p>
 			{isLoading ? (
 				<div className='flex justify-center items-center h-60'>
 					<div className='spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-blue-500 border-t-transparent'></div>
 				</div>
 			) : error ? (
 				<p className='text-red-500'>Error loading accounts data</p>
+			) : accounts?.length === 0 ? (
+				// Show a friendly message if no accounts are available
+				<p className='text-gray-500'>
+					No accounts yet. <Link to='/accounts' className="text-primaryColor underline">Add one to get started!</Link>
+				</p>
 			) : (
 				<div className='flex flex-col items-center'>
 					{/* Render Pie Chart */}
