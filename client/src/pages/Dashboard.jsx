@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import { useGet } from "../hooks/useGet";
 import  CurrentTransaction  from "../components/CurrentTransaction";
 import BudgetList from "../components/BudgetList";
+import { useState } from "react";
+import CreateTransactionModal from "../components/CreateTransactionModal";
 
 const capitalizeFirstLetter = (string) => {
 	if (!string) return "";
@@ -39,7 +41,12 @@ const Dashboard = () => {
 		0;
 	const totalExpenses =
 		transactionsSummary?.find((item) => item.type === "Expense")?.totalAmount ||
-		0;
+    0;
+  
+  	const [isModalOpen, setIsModalOpen] = useState(false);
+
+		const openModal = () => setIsModalOpen(true);
+		const closeModal = () => setIsModalOpen(false);
 
 	return (
 		<section className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen'>
@@ -48,13 +55,17 @@ const Dashboard = () => {
 					<p className='text-xl font-bold'>
 						Welcome back, {capitalizeFirstLetter(user?.firstname)} 👋
 					</p>
-					<button className='border px-5 py-1 rounded-lg bg-primaryColor text-white'>
+					<button
+						onClick={openModal}
+						className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-blue-600'>
 						Create transaction
 					</button>
 				</div>
 
+				<CreateTransactionModal isOpen={isModalOpen} onClose={closeModal} />
+
 				{/* Overview */}
-				<div className="mb-5">
+				<div className='mb-5'>
 					<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 px-2'>
 						<div className='rounded-lg bg-white shadow'>
 							<BarChartView />
@@ -111,21 +122,18 @@ const Dashboard = () => {
 							<PieChartView />
 						</div>
 					</div>
-        </div>
-        {/* current transactions */}
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2">
-          <div className="lg:col-span-2 px-2 md:grid-cols-1  rounded">
-            <div className="bg-white shadow rounded px-1">
-              <CurrentTransaction/>
-
-            </div>
-
-          </div>
-          <div className="col-span-1 ">
-            <BudgetList/>
-          </div>
-
-        </div>
+				</div>
+				{/* current transactions */}
+				<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2'>
+					<div className='lg:col-span-2 px-2 md:grid-cols-1  rounded'>
+						<div className='bg-white shadow rounded px-1'>
+							<CurrentTransaction />
+						</div>
+					</div>
+					<div className='col-span-1 '>
+						<BudgetList />
+					</div>
+				</div>
 			</div>
 		</section>
 	);

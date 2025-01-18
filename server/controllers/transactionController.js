@@ -90,10 +90,9 @@ const getAllTransactions = asyncHandler(async (req, res) => {
 			user: req.user._id,
 		}).populate("account category"); // Assuming `account` and `category` are references
 
-		// Check if transactions exist
+		// If no transactions are found, return an empty array
 		if (!transactions || transactions.length === 0) {
-			res.status(404);
-			throw new Error("No transactions found for the authenticated user");
+			return res.status(200).json([]); // Return an empty array with status 200
 		}
 
 		res.status(200).json(transactions);
@@ -102,6 +101,7 @@ const getAllTransactions = asyncHandler(async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 });
+
 
 
 

@@ -8,6 +8,7 @@ import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
+import AccountsList from "./pages/AccountsList";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				<Route path='/sign-in' element={<SignIn />} />
 				<Route path='/dashboard' element={<Dashboard />} />
 				<Route path='/transactions' element={<Transactions />} />
+				<Route path='/accounts' element={<AccountsList />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />

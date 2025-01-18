@@ -129,18 +129,17 @@ const deleteAccount = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "Account deleted successfully" });
 });
 
-// Get all accounts of the authenticated user
 const getAllAccounts = asyncHandler(async (req, res) => {
-    // Find all accounts belonging to the authenticated user
-    const accounts = await Account.find({ user: req.user._id });
+	// Find all accounts belonging to the authenticated user
+	const accounts = await Account.find({ user: req.user._id });
 
-    // If no accounts are found, return an empty array
-    if (!accounts || accounts.length === 0) {
-        return res.status(404).json({ message: "No accounts found" });
-    }
+	// If no accounts are found, return an empty array
+	if (!accounts || accounts.length === 0) {
+		return res.status(200).json([]); // Return an empty array with status 200
+	}
 
-    // Return the list of accounts
-    res.status(200).json(accounts);
+	// Return the list of accounts
+	res.status(200).json(accounts);
 });
 
 // Get a single account by ID for the authenticated user

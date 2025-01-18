@@ -62,6 +62,17 @@ const Navbar = () => {
 								<li>
 									<Link
 										className={`${
+											isActive("/accounts")
+												? "bg-black text-white"
+												: "hover:bg-black hover:text-white"
+										} px-3 py-1 rounded-full`}
+										to='/accounts'>
+										Accounts
+									</Link>
+								</li>
+								<li>
+									<Link
+										className={`${
 											isActive("/transactions")
 												? "bg-black text-white"
 												: "hover:bg-black hover:text-white"
