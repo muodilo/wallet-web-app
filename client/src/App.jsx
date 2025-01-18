@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 import Transactions from "./pages/Transactions";
 import AccountsList from "./pages/AccountsList";
+import CategoriesPage from "./pages/CategoriesPage";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 				<Route path='/dashboard' element={<Dashboard />} />
 				<Route path='/transactions' element={<Transactions />} />
 				<Route path='/accounts' element={<AccountsList />} />
+				<Route path='/categories' element={<CategoriesPage />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />

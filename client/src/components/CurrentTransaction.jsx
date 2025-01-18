@@ -79,14 +79,14 @@ export default function CurrentTransaction() {
 				<Table.Body className='divide-y'>
 					{sortedTransactions.map((transaction) => (
 						<Table.Row
-							key={transaction._id}
+							key={transaction?._id}
 							className='bg-white dark:border-gray-700 dark:bg-gray-800'>
 							<Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
-								{format(new Date(transaction.createdAt), "PPpp")}
+								{format(new Date(transaction?.createdAt), "PPpp")}
 							</Table.Cell>
 							<Table.Cell>{transaction?.description}</Table.Cell>
-							<Table.Cell>{transaction?.account.name}</Table.Cell>
-							<Table.Cell>{transaction?.category.name}</Table.Cell>
+							<Table.Cell>{transaction?.account?.name}</Table.Cell>
+							<Table.Cell>{transaction?.category?.name}</Table.Cell>
 							<Table.Cell>
 								<Badge
 									color={transaction?.type === "Income" ? "success" : "failure"}

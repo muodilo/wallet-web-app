@@ -245,9 +245,9 @@ const AllTransactions = () => {
 									<Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
 										{format(new Date(transaction.createdAt), "PPpp")}
 									</Table.Cell>
-									<Table.Cell>{transaction.description}</Table.Cell>
-									<Table.Cell>{transaction.account.name}</Table.Cell>
-									<Table.Cell>{transaction.category.name}</Table.Cell>
+									<Table.Cell>{transaction?.description}</Table.Cell>
+									<Table.Cell>{transaction?.account?.name}</Table.Cell>
+									<Table.Cell>{transaction?.category?.name}</Table.Cell>
 									<Table.Cell>
 										<Badge
 											color={
@@ -303,7 +303,7 @@ const AllTransactions = () => {
 								<option value=''>Select Account</option>
 								{accounts?.map((account) => (
 									<option key={account._id} value={account._id}>
-										{account.name}
+										{account?.name}
 									</option>
 								))}
 							</select>
@@ -323,7 +323,7 @@ const AllTransactions = () => {
 								<option value=''>Select Category</option>
 								{categories?.map((category) => (
 									<option key={category._id} value={category._id}>
-										{category.name}
+										{category?.name}
 									</option>
 								))}
 							</select>
@@ -342,7 +342,7 @@ const AllTransactions = () => {
 									<option value=''>Select Subcategory</option>
 									{subcategories.map((subcategory) => (
 										<option key={subcategory._id} value={subcategory._id}>
-											{subcategory.name}
+											{subcategory?.name}
 										</option>
 									))}
 								</select>

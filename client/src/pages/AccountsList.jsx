@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { Card, Badge } from "flowbite-react";
 import { useGet } from "../hooks/useGet"; // Custom hook for fetching data
 import { useSelector } from "react-redux"; // Access Redux store
@@ -6,6 +6,7 @@ import { toast } from "react-toastify"; // For error handling
 import CreateAccountModal from "../components/CreateAccountModal";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai"; // Icons for delete and edit
 import EditAccountModal from "../components/EditAccountModal"; // Edit modal component
+import {useNavigate} from 'react-router-dom'
 
 const AccountsList = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,9 +15,10 @@ const AccountsList = () => {
 
 	// Open the Create Account Modal
 	const openModal = () => setIsModalOpen(true);
+	const closeModal = () => setIsModalOpen(false);
+	const navigate = useNavigate();
 
 	// Close the Create Account Modal
-	const closeModal = () => setIsModalOpen(false);
 
 	// Open the Edit Account Modal
 	const openEditModal = (account) => {
@@ -33,6 +35,12 @@ const AccountsList = () => {
 	// Retrieve user and token from Redux store
 	const { user } = useSelector((state) => state.reducer.auth);
 	const token = user?.token;
+
+		useEffect(() => {
+			if (!user) {
+				navigate("/");
+			}
+		}, [user]);
 
 	// API URL
 	const API_URL = import.meta.env.VITE_API_URL;
@@ -82,7 +90,7 @@ const AccountsList = () => {
 				<h2 className='text-2xl font-bold mb-4'>Accounts</h2>
 				<button
 					onClick={openModal}
-					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-blue-600'>
+					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryColor'>
 					Create account
 				</button>
 				<CreateAccountModal isOpen={isModalOpen} closeModal={closeModal} />
