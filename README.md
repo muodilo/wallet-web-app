@@ -28,6 +28,16 @@ A wallet web application designed to help users track income, expenses, and budg
    ```bash
    git clone https://github.com/muodilo/wallet-web-app.git
 
+## env
+1. FrontEnd
+-VITE_API_URL="http://localhost:5000/api/v1" 
+2. Backend
+-MONGO_URI="your-mongo-uri"  # Replace with your MongoDB connection string
+-JWT_SECRET="your-secret-key"  # Replace with your JWT secret
+
+
+
+
 
 ## Deployed Link
 - **Frontend**: [View the live site here!](https://wallet-web-app-weld.vercel.app/)
