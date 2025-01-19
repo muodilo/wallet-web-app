@@ -3,6 +3,7 @@ import AllTransactions from "../components/AllTransactions";
 import CreateTransactionModal from "../components/CreateTransactionModal";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const Transactions = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,8 +25,9 @@ const Transactions = () => {
 				<h2 className='text-xl font-semibold'>All Transactions</h2>
 				<button
 					onClick={openModal}
-					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryColor'>
-					Create transaction
+					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryColor flex items-center gap-1'>
+					<IoIosAddCircleOutline />
+					<p className="text-xs">Create transaction</p>
 				</button>
 			</div>
 

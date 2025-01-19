@@ -20,7 +20,7 @@ const chartSetting = {
 };
 
 export default function BarChartView() {
-	const [period, setPeriod] = useState("week"); // Default to 'week'
+	const [period, setPeriod] = useState("month"); // Default to 'week'
 	const { user } = useSelector((state) => state.reducer.auth);
 	const token = user?.token;
 	const API_URL = import.meta.env.VITE_API_URL;
@@ -71,7 +71,7 @@ export default function BarChartView() {
 						className='p-2 border rounded bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
 						value={period}
 						onChange={(e) => setPeriod(e.target.value)}>
-						<option value='week'>This Week</option>
+						{/* <option value='week'>This Week</option> */}
 						<option value='month'>This Month</option>
 						<option value='year'>This Year</option>
 					</select>
