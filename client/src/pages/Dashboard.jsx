@@ -122,7 +122,7 @@ const generateReport = async () => {
 
 
 	return (
-		<section className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen'>
+		<section className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen pb-10'>
 			<div className='pt-24'>
 				{/* Alert for budget exceeded */}
 				{showAlert.budgetExceeded && (

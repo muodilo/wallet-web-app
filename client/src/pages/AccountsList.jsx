@@ -94,14 +94,14 @@ const AccountsList = () => {
 	};
 
 	return (
-		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
+		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100 pb-10'>
 			<div className='flex items-center justify-between mb-5'>
 				<h2 className='text-2xl font-bold mb-4'>Accounts</h2>
 				<button
 					onClick={openModal}
 					className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'>
 					<IoIosAddCircleOutline />
-					<p className="text-xs">Create account</p>
+					<p className='text-xs'>Create account</p>
 				</button>
 				<CreateAccountModal isOpen={isModalOpen} closeModal={closeModal} />
 			</div>
