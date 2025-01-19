@@ -35,9 +35,7 @@ export default function BudgetListpage() {
 				const data = await response.json();
 				if (response.ok) {
 					setCategories(data);
-				} else {
-					toast.error("Failed to fetch categories.");
-				}
+				} 
 			} catch (error) {
 				console.error(error);
 				toast.error("An error occurred while fetching categories.");
