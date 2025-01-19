@@ -20,14 +20,14 @@ const Transactions = () => {
 		}, [user]);
 
 	return (
-		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
+		<div className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100 pb-10'>
 			<div className='mb-4 flex items-center justify-between'>
 				<h2 className='text-xl font-semibold'>All Transactions</h2>
 				<button
 					onClick={openModal}
 					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryColor flex items-center gap-1'>
 					<IoIosAddCircleOutline />
-					<p className="text-xs">Create transaction</p>
+					<p className='text-xs'>Create transaction</p>
 				</button>
 			</div>
 

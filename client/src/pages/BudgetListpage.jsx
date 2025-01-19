@@ -123,7 +123,7 @@ export default function BudgetListpage() {
 	// If loading, show skeleton loaders
 	if (isLoading) {
 		return (
-			<section className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
+			<section className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100 pb-10'>
 				<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
 					{[...Array(6)].map((_, index) => (
 						<div
@@ -151,6 +151,7 @@ export default function BudgetListpage() {
 		<section className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
 			<div className='flex justify-between items-center mb-6'>
 				<h1 className='text-xl font-semibold'>Budgets</h1>
+
 				<button
 					className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'
 					onClick={handleOpenModal}>
@@ -158,6 +159,10 @@ export default function BudgetListpage() {
 					<p className='text-xs'>Create New Budget</p>
 				</button>
 			</div>
+
+			{budgets.length === 0 && (
+				<p className='text-gray-500'>No budgets found.</p>
+			)}
 
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
 				{budgets.map((budget) => {

@@ -256,7 +256,7 @@ fetchCategories();
   }
 
 return (
-	<div className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen pt-28'>
+	<div className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen pt-28 pb-10'>
 		<div className='flex items-center justify-between mb-5'>
 			<h1 className='text-2xl font-bold mb-6'>Categories</h1>
 

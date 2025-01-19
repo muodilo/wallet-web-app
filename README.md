@@ -1,13 +1,13 @@
 # Wallet Web Application
 
 ## Overview
-A wallet web application designed to help users track income, expenses, and budgets across multiple accounts (e.g., bank, mobile money, cash). It allows generating detailed reports, visualizing data, and setting budgets with alerts when exceeded.
+A wallet web application designed to help users track income, expenses, and budgets across multiple accounts (e.g., bank, mobile money, cash). It allows generating  report, visualizing data, and setting budgets with alerts when exceeded.
 
 ## Features
 - **Transaction Tracking**: Track all income and expense transactions.
 - **Category Management**: Add categories and subcategories for better organization.
 - **Budget Alerts**: Notify users when their spending exceeds the set budget.
-- **Reports**: Generate reports based on desired time ranges.
+- **Reports**: Generate report.
 - **Visualization**: Display data through charts and graphs for better insights.
 
 ## Tech Stack
@@ -15,7 +15,7 @@ A wallet web application designed to help users track income, expenses, and budg
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB (via Mongoose)
 - **Authentication**: JWT
-- **Visualization**: Chart.js, Recharts
+- **Visualization**: mui/x-charts
 
 ## Prerequisites
 - Node.js (v14 or later)
@@ -32,4 +32,4 @@ A wallet web application designed to help users track income, expenses, and budg
 ## Deployed Link
 - **Frontend**: [View the live site here!](https://wallet-web-app-weld.vercel.app/)
 - **API**: [Swagger API Documentation](https://wallet-web-app.onrender.com/api-docs/#)
-- **Backend**: [backend](https://wallet-web-app.onrender.com/)
+
