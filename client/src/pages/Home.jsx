@@ -6,6 +6,7 @@ import { FiBarChart2 } from "react-icons/fi";
 import { FiPieChart } from "react-icons/fi";
 import { MdOutlineInsights } from "react-icons/md";
 import { Link } from "react-router-dom";
+import image1 from "../assets/walletapp123.PNG";
 
 
 const Home = () => {
@@ -81,8 +82,7 @@ const Home = () => {
 						{/* Border mimicking a device */}
 						<div className='relative border-8 border-gray-300 rounded-xl bg-white overflow-hidden'>
 							<img
-								src='https://www.justinmind.com/wp-content/webp-express/webp-images/uploads/2020/02/dahsboard-design-best-practices-example.png.webp'
-								alt='Dashboard Screenshot'
+								src={image1}
 								className='w-full h-full object-cover'
 							/>
 						</div>
