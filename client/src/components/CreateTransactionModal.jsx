@@ -159,7 +159,7 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 			}
 		} catch (error) {
 			console.error(error);
-			toast.error("An error occurred while adding subcategory.");
+			toast.error("An error occurred while adding subcategory");
 		}
 	};
 
