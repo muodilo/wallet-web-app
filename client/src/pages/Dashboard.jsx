@@ -4,11 +4,15 @@ import { CiMenuKebab } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { FaDownLong } from "react-icons/fa6";
 import PieChartView from "../components/PieChartView";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGet } from "../hooks/useGet";
 import CurrentTransaction from "../components/CurrentTransaction";
 import BudgetList from "../components/BudgetList";
 import CreateTransactionModal from "../components/CreateTransactionModal";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
+import { FiDownloadCloud } from "react-icons/fi";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const capitalizeFirstLetter = (string) => {
 	if (!string) return "";
@@ -29,6 +33,7 @@ const Dashboard = () => {
 	const { data: budgets } = useGet(`${API_URL}/budgets`, token, 5000);
 
 	const navigate = useNavigate();
+	const reportRef = useRef(null); // Reference to the report section
 
 	useEffect(() => {
 		if (!user) {
@@ -82,6 +87,40 @@ const Dashboard = () => {
 		});
 	}, [budgets]);
 
+	// Generate PDF Report
+const generateReport = async () => {
+	const element = reportRef.current;
+
+	try {
+		// Convert the element to a PNG image
+		const dataUrl = await toPng(element, { quality: 0.95 });
+
+		// Create a PDF and add the image
+		const pdf = new jsPDF("portrait", "mm", "a4");
+		const imgWidth = 190; // Adjust width for PDF
+		let imgHeight = (element.offsetHeight * imgWidth) / element.offsetWidth;
+
+		// If the screen size is small, scale down the image
+		if (window.innerWidth <= 768) {
+			imgHeight = imgHeight * 0.7; // Further scale down for small screens
+		}
+
+		// Adding the title and padding top
+		const todayDate = new Date().toLocaleDateString(); // Get today's date
+		pdf.setFontSize(14);
+		pdf.text(`Your Wallet App Report - ${todayDate}`, 10, 10);
+
+		// Add some padding before adding the image
+		pdf.addImage(dataUrl, "PNG", 10, 20, imgWidth, imgHeight);
+
+		// Save the PDF
+		pdf.save("dashboard-report.pdf");
+	} catch (error) {
+		console.error("Failed to generate report:", error);
+	}
+};
+
+
 	return (
 		<section className='lg:px-[7rem] md:px-[5rem] px-5 bg-slate-100 min-h-screen'>
 			<div className='pt-24'>
@@ -117,83 +156,93 @@ const Dashboard = () => {
 					<p className='text-xl font-bold'>
 						Welcome back, {capitalizeFirstLetter(user?.firstname)} 👋
 					</p>
-					<button
-						onClick={openModal}
-						className='bg-primaryColor text-white px-4 py-2 rounded'>
-						Create transaction
-					</button>
-				</div>
-
-				<CreateTransactionModal isOpen={isModalOpen} onClose={closeModal} />
-
-				{/* Overview */}
-				<div className='mb-5'>
-					<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 px-2'>
-						<div className='rounded-lg bg-white shadow'>
-							<BarChartView />
-						</div>
-						<div className='flex flex-col gap-2'>
-							<div className='border flex-1 rounded-lg bg-white flex flex-col shadow'>
-								<div className='flex-1 p-4'>
-									<div className='flex items-center justify-between'>
-										<p className='mb-5'>Total Income</p>
-										<CiMenuKebab className='cursor-pointer' />
-									</div>
-									<div className='flex items-center gap-2'>
-										<FaDownLong className='text-green-500 rotate-180' />
-										<p className='font-bold text-2xl '>
-											{totalIncome.toLocaleString()} Rwf
-										</p>
-									</div>
-								</div>
-
-								<hr />
-								<div className='py-1 text-center'>
-									<Link
-										to='/transactions'
-										className='text-md text-primaryColor'>
-										View all transactions
-									</Link>
-								</div>
-							</div>
-							<div className='border flex-1 rounded-lg bg-white flex flex-col shadow'>
-								<div className='flex-1 p-4 '>
-									<div className='flex items-center justify-between'>
-										<p className='mb-5'>Total Expenses</p>
-										<CiMenuKebab className='cursor-pointer' />
-									</div>
-									<div className='flex items-center gap-2'>
-										<FaDownLong className='text-red-500' />
-										<p className='font-bold text-2xl '>
-											{totalExpenses.toLocaleString()} Rwf
-										</p>
-									</div>
-								</div>
-
-								<hr />
-								<div className='py-1 text-center'>
-									<Link
-										to='/transactions'
-										className='text-md text-primaryColor'>
-										View all transactions
-									</Link>
-								</div>
-							</div>
-						</div>
-						<div className='rounded-lg bg-white flex items-center shadow'>
-							<PieChartView />
-						</div>
+					<div className='flex items-center gap-4'>
+						<button
+							onClick={generateReport}
+							className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'>
+							<FiDownloadCloud />
+							<p className='text-xs'>Generate Report</p>
+						</button>
+						<button
+							onClick={openModal}
+							className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'>
+							<IoIosAddCircleOutline />
+							<p className="text-xs">Create transaction</p>
+						</button>
 					</div>
 				</div>
-				{/* current transactions */}
-				<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2'>
-					<div className='lg:col-span-2 px-2 md:grid-cols-1  rounded'>
-						<div className='bg-white shadow rounded px-1'>
-							<CurrentTransaction />
+
+				{/* Report Section */}
+				<div ref={reportRef} className='pt-4'>
+					<CreateTransactionModal isOpen={isModalOpen} onClose={closeModal} />
+
+					{/* Overview */}
+					<div className='mb-5'>
+						<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2 px-2'>
+							<div className='rounded-lg bg-white shadow'>
+								<BarChartView />
+							</div>
+							<div className='flex flex-col gap-2'>
+								<div className='border flex-1 rounded-lg bg-white flex flex-col shadow'>
+									<div className='flex-1 p-4'>
+										<div className='flex items-center justify-between'>
+											<p className='mb-5'>Total Income</p>
+											<CiMenuKebab className='cursor-pointer' />
+										</div>
+										<div className='flex items-center gap-2'>
+											<FaDownLong className='text-green-500 rotate-180' />
+											<p className='font-bold text-2xl '>
+												{totalIncome.toLocaleString()} Rwf
+											</p>
+										</div>
+									</div>
+
+									<hr />
+									<div className='py-1 text-center'>
+										<Link
+											to='/transactions'
+											className='text-md text-primaryColor'>
+											View all transactions
+										</Link>
+									</div>
+								</div>
+								<div className='border flex-1 rounded-lg bg-white flex flex-col shadow'>
+									<div className='flex-1 p-4 '>
+										<div className='flex items-center justify-between'>
+											<p className='mb-5'>Total Expenses</p>
+											<CiMenuKebab className='cursor-pointer' />
+										</div>
+										<div className='flex items-center gap-2'>
+											<FaDownLong className='text-red-500' />
+											<p className='font-bold text-2xl '>
+												{totalExpenses.toLocaleString()} Rwf
+											</p>
+										</div>
+									</div>
+
+									<hr />
+									<div className='py-1 text-center'>
+										<Link
+											to='/transactions'
+											className='text-md text-primaryColor'>
+											View all transactions
+										</Link>
+									</div>
+								</div>
+							</div>
+							<div className='rounded-lg bg-white flex items-center shadow'>
+								<PieChartView />
+							</div>
 						</div>
 					</div>
-					<div className='col-span-1 '>
-						<BudgetList />
+					{/* current transactions */}
+					<div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-2'>
+						<div className='lg:col-span-2 md:col-span-2 col-span-1 rounded-lg bg-white p-4 shadow'>
+							<CurrentTransaction transactionsSummary={transactionsSummary} />
+						</div>
+						<div className='rounded-lg '>
+							<BudgetList budgets={budgets} />
+						</div>
 					</div>
 				</div>
 			</div>

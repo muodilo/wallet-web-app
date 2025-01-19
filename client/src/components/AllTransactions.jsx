@@ -8,6 +8,7 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
 
+
 const AllTransactions = () => {
 	const { user } = useSelector((state) => state.reducer.auth);
 	const token = user?.token;
@@ -33,9 +34,10 @@ const AllTransactions = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editedTransaction, setEditedTransaction] = useState(null);
 	const [subcategories, setSubcategories] = useState([]);
+	const [editing,setEditing] = useState(false);
 
 	// State for deleting (track specific transaction)
-	const [deletingTransactionId, setDeletingTransactionId] = useState(null);
+
 
 	// Extract start and end dates from selected range
 	const [startDate, endDate] = selectedRange;
@@ -123,8 +125,10 @@ const AllTransactions = () => {
 	};
 
 	// Handle edit form submission
-	const handleEditSubmit = async () => {
+	const handleEditSubmit = async (e) => {
+		e.preventDefault();
 		if (!editedTransaction) return;
+		setEditing(true);
 
 		try {
 			const response = await fetch(
@@ -148,12 +152,14 @@ const AllTransactions = () => {
 		} catch (error) {
 			console.error("Error updating transaction:", error);
 			toast.error("Failed to update transaction.");
+		} finally {
+			setEditing(false);
 		}
 	};
 
 	// Handle delete transaction
 	const handleDelete = async (transactionId) => {
-		setDeletingTransactionId(transactionId); // Set specific transaction to delete
+		
 		// Show confirmation dialog before proceeding with deletion
 		const isConfirmed = window.confirm(
 			"Are you sure you want to delete this transaction?"
@@ -179,9 +185,7 @@ const AllTransactions = () => {
 		} catch (error) {
 			console.error("Error deleting transaction:", error);
 			toast.error("Failed to delete transaction.");
-		} finally {
-			setDeletingTransactionId(null); // Reset deleting state
-		}
+		} 
 	};
 
 	if (error) {
@@ -267,15 +271,15 @@ const AllTransactions = () => {
 									</Table.Cell>
 									<Table.Cell>{transaction.amount}</Table.Cell>
 									<Table.Cell className='flex gap-2'>
-										<Button onClick={() => openEditModal(transaction)}>
+										<button className="text-primaryColor" onClick={() => openEditModal(transaction)}>
 											<Edit size={16} />
-										</Button>
-										<Button
+										</button>
+									<button
+										className="text-red-500"
 											onClick={() => handleDelete(transaction._id)}
-											isLoading={deletingTransactionId === transaction._id}
-											loadingText='Deleting'>
+											>
 											<Trash size={16} />
-										</Button>
+										</button>
 									</Table.Cell>
 								</Table.Row>
 						  ))}
@@ -286,7 +290,8 @@ const AllTransactions = () => {
 				<Modal show={isModalOpen} onClose={closeEditModal}>
 					<Modal.Header>Edit Transaction</Modal.Header>
 					<Modal.Body>
-						<form onSubmit={handleEditSubmit}>
+						<form onSubmit={handleEditSubmit} className='grid gap-3'>
+							<label htmlFor=''>Description</label>
 							<TextInput
 								label='Description'
 								value={editedTransaction?.description || ""}
@@ -297,6 +302,7 @@ const AllTransactions = () => {
 									})
 								}
 							/>
+
 							<select
 								value={editedTransaction?.account._id || ""}
 								onChange={(e) =>
@@ -307,7 +313,7 @@ const AllTransactions = () => {
 										),
 									})
 								}
-								className='w-full p-2 border border-gray-300 rounded-md'>
+								className='w-full p-2 border hidden border-gray-300 rounded-md'>
 								<option value=''>Select Account</option>
 								{accounts?.map((account) => (
 									<option key={account._id} value={account._id}>
@@ -366,7 +372,7 @@ const AllTransactions = () => {
 									})
 								}
 							/>
-							<Button type='submit'>Save Changes</Button>
+							<Button type='submit'>{editing ? "Updating" : "Update"}</Button>
 						</form>
 					</Modal.Body>
 				</Modal>

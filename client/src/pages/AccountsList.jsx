@@ -6,7 +6,8 @@ import { toast } from "react-toastify"; // For error handling
 import CreateAccountModal from "../components/CreateAccountModal";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai"; // Icons for delete and edit
 import EditAccountModal from "../components/EditAccountModal"; // Edit modal component
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const AccountsList = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -98,8 +99,9 @@ const AccountsList = () => {
 				<h2 className='text-2xl font-bold mb-4'>Accounts</h2>
 				<button
 					onClick={openModal}
-					className='bg-primaryColor text-white px-4 py-2 rounded hover:bg-primaryColor'>
-					Create account
+					className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'>
+					<IoIosAddCircleOutline />
+					<p className="text-xs">Create account</p>
 				</button>
 				<CreateAccountModal isOpen={isModalOpen} closeModal={closeModal} />
 			</div>

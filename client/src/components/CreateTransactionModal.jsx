@@ -165,6 +165,14 @@ const CreateTransactionModal = ({ isOpen, onClose }) => {
 
 	// Handle deleting a subcategory
 	const handleDeleteSubcategory = async (subcategoryId) => {
+		// Show confirmation dialog before proceeding with deletion
+		const isConfirmed = window.confirm(
+			"Are you sure you want to delete this subcategory?"
+		);
+
+		if (!isConfirmed) {
+			return; // If the user cancels, stop the deletion
+		}
 		try {
 			const response = await fetch(`${API_URL}/categories/${subcategoryId}`, {
 				method: "DELETE",

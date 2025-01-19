@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Modal, Button, TextInput, Select } from "flowbite-react";
-import { useGet } from "../hooks/useGet";
+import { Modal, Button, TextInput, Select, Progress } from "flowbite-react";
 import { useSelector } from "react-redux";
-import { Progress } from "flowbite-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { IoIosAddCircleOutline, IoMdTrash } from "react-icons/io";
+import { useGet } from "../hooks/useGet";
 
 export default function BudgetListpage() {
 	const { user } = useSelector((state) => state.reducer.auth);
@@ -13,38 +13,30 @@ export default function BudgetListpage() {
 	const API_URL = import.meta.env.VITE_API_URL;
 	const navigate = useNavigate();
 
-		useEffect(() => {
-			if (!user) {
-				navigate("/");
-			}
-		}, [user]);
+	useEffect(() => {
+		if (!user) {
+			navigate("/");
+		}
+	}, [user]);
 
-	// State for categories, subcategories, and modal
+	// State for categories and modal
 	const [categories, setCategories] = useState([]);
-	const [subcategories, setSubcategories] = useState([]);
-	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [category, setCategory] = useState("");
-	const [subcategory, setSubcategory] = useState("");
 	const [limit, setLimit] = useState("");
 	const [isModalOpen, setModalOpen] = useState(false);
-	const [isCategoriesEmpty, setIsCategoriesEmpty] = useState(false);
 
-	// Fetch top-level categories (parent === null) on mount
+	// Fetch all categories on mount
 	useEffect(() => {
-		const fetchTopLevelCategories = async () => {
+		const fetchCategories = async () => {
 			try {
 				const response = await fetch(`${API_URL}/categories`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 				const data = await response.json();
-				if (data.length === 0) {
-					setIsCategoriesEmpty(true);
-				}
 				if (response.ok) {
-					const topLevelCategories = data.filter((cat) => cat.parent === null);
-					setCategories(topLevelCategories);
+					setCategories(data);
 				} else {
-					if (user) toast.error("Failed to fetch categories.");
+					toast.error("Failed to fetch categories.");
 				}
 			} catch (error) {
 				console.error(error);
@@ -52,70 +44,37 @@ export default function BudgetListpage() {
 			}
 		};
 
-		fetchTopLevelCategories();
-	}, [API_URL, token, user]);
-
-	// Fetch subcategories when a category is clicked
-	const fetchCategoryFamily = async (categoryId) => {
-		try {
-			const response = await fetch(
-				`${API_URL}/categories/family/${categoryId}`,
-				{
-					headers: { Authorization: `Bearer ${token}` },
-				}
-			);
-			const data = await response.json();
-
-			if (response.ok) {
-				return data.children || [];
-			} else {
-				toast.error("Failed to fetch subcategories.");
-				return [];
-			}
-		} catch (error) {
-			console.error(error);
-			toast.error("An error occurred while fetching subcategories.");
-			return [];
-		}
-	};
-
-	// Handle category selection and display children if available
-	const handleCategoryClick = async (category) => {
-		if (selectedCategory?._id !== category._id) {
-			setSelectedCategory(category);
-			setCategory(category._id);
-
-			// Fetch subcategories only once when a category is clicked
-			const children = await fetchCategoryFamily(category._id);
-			if (children.length > 0) {
-				setSubcategories(children); // Set children for the selected category
-			} else {
-				setSubcategories([]); // No children, so reset subcategories
-			}
-		} else {
-			// If the same category is clicked again, clear the subcategories
-			setSelectedCategory(null);
-			setSubcategories([]);
-		}
-	};
+		fetchCategories();
+	}, [API_URL, token]);
 
 	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!category || !limit)
-			return alert("Please fill in all required fields.");
+			return toast.error("Please fill in all required fields.");
+
+		// Find the selected category and check its type
+		const selectedCategory = categories.find((cat) => cat._id === category);
+		if (!selectedCategory || selectedCategory.type !== "Expense")
+			return toast.error("Budget can only be created for Expense categories.");
 
 		try {
-			await axios.post(
+			const response = await axios.post(
 				`${API_URL}/budgets`,
-				{ category, subcategory, limit: Number(limit) },
+				{ category, limit: Number(limit) },
 				{ headers: { Authorization: `Bearer ${token}` } }
 			);
-			toast.success("Budget created successfully!");
-			handleCloseModal(); // Close modal after successful creation
+
+			// Check the status code for success (200-299 is success)
+			if (response.status >= 200 && response.status < 300) {
+				toast.success("Budget created successfully!");
+				handleCloseModal(); // Close modal after successful creation
+			} else {
+				toast.error(response.data?.message || "Failed to create budget.");
+			}
 		} catch (err) {
 			console.error("Failed to create budget", err);
-			toast.error("Failed to create budget.");
+			toast.error(err.response?.data?.message || "Failed to create budget.");
 		}
 	};
 
@@ -123,10 +82,7 @@ export default function BudgetListpage() {
 	const handleCloseModal = () => {
 		setModalOpen(false);
 		setCategory("");
-		setSubcategory("");
 		setLimit("");
-		setSelectedCategory(null);
-		setSubcategories([]);
 	};
 
 	// Open the modal
@@ -138,6 +94,31 @@ export default function BudgetListpage() {
 		error,
 		isLoading,
 	} = useGet(`${API_URL}/budgets`, token, 5000);
+
+	// Handle delete
+	const handleDelete = async (id) => {
+		// Show confirmation dialog before proceeding with deletion
+		const isConfirmed = window.confirm(
+			"Are you sure you want to delete this account?"
+		);
+
+		if (!isConfirmed) {
+			return; // If the user cancels, stop the deletion
+		}
+		try {
+			const response = await axios.delete(`${API_URL}/budgets/${id}`, {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			if (response.status === 200) {
+				toast.success("Budget deleted successfully!");
+			} else {
+				toast.error("Failed to delete budget.");
+			}
+		} catch (err) {
+			console.error("Failed to delete budget", err);
+			toast.error("An error occurred while deleting the budget.");
+		}
+	};
 
 	// If loading, show skeleton loaders
 	if (isLoading) {
@@ -170,7 +151,12 @@ export default function BudgetListpage() {
 		<section className='lg:px-[7rem] md:px-[5rem] px-5 pt-28 min-h-screen bg-slate-100'>
 			<div className='flex justify-between items-center mb-6'>
 				<h1 className='text-xl font-semibold'>Budgets</h1>
-				<Button onClick={handleOpenModal}>Create New Budget</Button>
+				<button
+					className='bg-primaryColor text-white px-4 py-2 rounded flex items-center gap-1'
+					onClick={handleOpenModal}>
+					<IoIosAddCircleOutline />
+					<p className='text-xs'>Create New Budget</p>
+				</button>
 			</div>
 
 			<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
@@ -188,9 +174,17 @@ export default function BudgetListpage() {
 						<div
 							key={budget._id}
 							className='p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md'>
-							<h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
-								{categoryName}
-							</h3>
+							<div className='flex justify-between items-start'>
+								<h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+									{categoryName}
+								</h3>
+								<button
+									onClick={() => handleDelete(budget._id)}
+									className='text-red-500 hover:text-red-700'>
+									<IoMdTrash />
+								</button>
+							</div>
+
 							<p
 								className={`text-sm font-medium mb-4 ${
 									progress === 100
@@ -218,9 +212,9 @@ export default function BudgetListpage() {
 				<Modal.Header>Create New Budget</Modal.Header>
 				<Modal.Body>
 					<form onSubmit={handleSubmit} className='space-y-4'>
-						{isCategoriesEmpty? (<Link to='/categories' className='text-primaryColor underline'>Fisr of all, click 👉here to create Category.</Link>):(<Select
+						<Select
 							required
-							onChange={(e) => handleCategoryClick(e.target.value)}
+							onChange={(e) => setCategory(e.target.value)}
 							value={category}
 							placeholder='Select Category'>
 							<option value='' disabled>
@@ -231,35 +225,19 @@ export default function BudgetListpage() {
 									{cat.name}
 								</option>
 							))}
-						</Select>)}
-
-						{subcategories.length > 0 && (
-							<Select
-								onChange={(e) => setSubcategory(e.target.value)}
-								value={subcategory}
-								placeholder='Select Subcategory'>
-								<option value='' disabled>
-									Select Subcategory
-								</option>
-								{subcategories.map((sub) => (
-									<option key={sub._id} value={sub._id}>
-										{sub.name}
-									</option>
-								))}
-							</Select>
-						)}
+						</Select>
 
 						<TextInput
-							required
 							type='number'
-							placeholder='Enter Limit'
+							required
 							value={limit}
 							onChange={(e) => setLimit(e.target.value)}
+							label='Limit'
+							placeholder='Enter the budget limit'
 						/>
 
-						<div className='flex justify-end'>
-							<Button type='submit'>Save Budget</Button>
-						</div>
+						{/* Button is inside the form now */}
+						<Button type='submit'>Create Budget</Button>
 					</form>
 				</Modal.Body>
 			</Modal>
